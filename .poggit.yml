@@ -1,5 +1,4 @@
---- # Poggit-CI Manifest
-
+---
 build-by-default: true
 
 branches:
@@ -10,5 +9,4 @@ projects:
     path: "ItemsCreatorOreAndArmor"
     lint:
       phpstan: false
-
 ...
