@@ -1,0 +1,55 @@
+name: ItemsPlus
+main: nestouille\itemsplus\Main
+src-namespace-prefix: nestouille\itemsplus
+version: 2.4.5
+api: 5.0.0
+author: Nest
+description: Create and manage custom items, tools, armor, blocks and ores in-game using Customies.
+prefix: ItemsPlus
+load: STARTUP
+depend:
+  - Customies
+
+commands:
+  itemsplus:
+    description: List, give and equip custom items, tools and armor.
+    usage: "/itemsplus list | /itemsplus give [player] <item> [quantity] | /itemsplus equip [player] <tank|nexium>"
+    permission: itemsplus.command
+  minerais:
+    description: Generate custom ores registered by ItemsPlus.
+    usage: "/minerais c [radius] | /minerais <world> <ore>"
+    permission: minerais.command
+  createitem:
+    description: Open the in-game creator for custom items, blocks, ores, tools and armor.
+    usage: "/createitem [block|ore|manage]"
+    aliases: [itemcreator, icreate]
+    permission: itemsplus.createitem
+  createminerai:
+    description: Open the custom ore creator directly.
+    usage: "/createminerai"
+    aliases: [createore]
+    permission: itemsplus.createitem
+  createblock:
+    description: Open the standard custom block creator directly.
+    usage: "/createblock"
+    aliases: [createbloc]
+    permission: itemsplus.createitem
+  manageitem:
+    description: Edit or delete custom items, tools, armor, blocks and ores.
+    usage: "/manageitem"
+    aliases: [edititem, itemmanager, gereritem]
+    permission: itemsplus.manage
+
+permissions:
+  itemsplus.command:
+    description: Allows the user to run /itemsplus.
+    default: op
+  minerais.command:
+    description: Allows the user to run /minerais.
+    default: op
+  itemsplus.createitem:
+    description: Allows the user to create custom items, blocks and ores in-game.
+    default: op
+  itemsplus.manage:
+    description: Allows the user to edit and delete custom content in-game.
+    default: op
