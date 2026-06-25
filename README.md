@@ -61,7 +61,7 @@ plugin_data/ItemsPlus/config.yml
 Main command for listing, assigning and equipping custom items.
   
 | Command                                      | Description                                         |
-| -------------------------------------------- | ----------------------------------------- -------   |
+| -------------------------------------------- | --------------------------------------------------- |
 | `/itemsplus`                                 | Displays the list of available items.               |
 | `/itemsplus list`                            | Displays all saved items.                           |
 | `/itemsplus give <item> [quantity]`          | Gives an item to the player who enters the command. |
@@ -82,7 +82,7 @@ Permission: `itemsplus.command` — default operators.
 Opens the in-game custom content creator.
 
 | Command               | Description                                       |
-| --------------------- | ----------------------------------------------- - |
+| --------------------- | ------------------------------------------------- |
 | `/createitem`         | Opens the main creation menu.                     |
 | `/createitem ore`     |  Opens the ore creator directly.                  |
 | `/createitem block`   | Opens the normal block creator directly.          |
@@ -146,7 +146,7 @@ Deleting an item requires confirmation by typing `DELETE`.
 Command for generating custom minerals.
   
 | Command                       | Description                                              |
-| ----------------------------- | ------------------------------------ -----------------   |
+| ----------------------------- | -------------------------------------------------------- |
 | `/minerals c [radius]`        | Generates custom ores around the player.                 |
 | `/minerals <world> <ore>`     | Starts ore generation on the specified map.              |
 
@@ -164,7 +164,7 @@ Permission: `minerals.command` — operators by default.
 ## Permissions
 
 | Permission             | Description                          | Default value     |
-| ---------------------- | ------------------------------------ | ---------------- -|
+| ---------------------- | ------------------------------------ | ----------------- |
 | `itemsplus.command`    | Use `/itemsplus`.                    | OP                |
 | `itemsplus.createitem` | Create items, blocks and ores.       | OP                |
 | `itemsplus.manage`     | Edit or delete creations.            | OP                |
