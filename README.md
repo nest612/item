@@ -44,7 +44,7 @@ The plugin combines the former **ItemsPlus** and **MineraisPlus** systems into a
 3. Install **Customies** inside the `plugins/` directory.
 4. Install or keep the resource pack containing the custom textures.
 5. Remove older separate versions of `ItemsPlus` and `MineraisPlus` to prevent command and identifier conflicts.
-6. Fully restart the server.
+6. Fully restart the server. 
 
 The main configuration file is created at:
 
