@@ -1,222 +1,223 @@
 # ItemsPlus
 
-Plugin **PocketMine-MP 5** permettant de créer, enregistrer, modifier et distribuer des items, outils, armures, blocs et minerais personnalisés directement en jeu.
+The **PocketMine-MP 5** plugin allows you to create, save, edit and distribute custom items, tools, armour, blocks and ores directly within the game.
 
-Le plugin regroupe les anciens systèmes **ItemsPlus** et **MineraisPlus** dans une seule extension et utilise **Customies** pour enregistrer le contenu personnalisé.
+The plugin combines the former **ItemsPlus** and **MineraisPlus** systems into a single extension and uses **Customies** to save custom content.
 
-## Informations
+## Information
 
-| Élément    | Valeur                               |
+| Element    | Value                                |
 | ---------- | ------------------------------------ |
-| Nom        | ItemsPlus                            |
+| Name       | ItemsPlus                            |
 | Version    | `2.4.5-block-placement-rollback-fix` |
-| Auteur     | **Nest**                             |
+| Author     | **Nest**                             |
 | API        | PocketMine-MP `5.0.0`                |
-| Dépendance | Customies                            |
-| Chargement | `STARTUP`                            |
+| Dependency | Customies                            |
+| Loading    | `STARTUP`                            |
 
-## Fonctionnalités
+## Features
 
-* Création d’items personnalisés depuis une interface en jeu.
-* Création d’épées, pioches, haches, pelles et houes.
-* Création de casques, plastrons, jambières et bottes.
-* Création de blocs normaux personnalisés.
-* Création et génération de minerais personnalisés.
-* Modification et suppression du contenu depuis une interface en jeu.
-* Configuration de la durabilité, des dégâts, de la vitesse de minage et du niveau de récolte.
-* Configuration de la défense et de la résistance des armures.
-* Gestion des drops, des filons et des hauteurs de génération des minerais.
-* Classement automatique des items dans les catégories du menu créatif.
-* Animation vanilla des outils lorsqu’ils sont utilisés en main.
-* Correctif de pose des blocs empêchant les rollbacks et les blocs fantômes.
-* Compatibilité avec les anciens contenus Tank, Nexium, Azurite et Auralite.
+* Crafting custom items via an in-game interface.
+* Crafting swords, pickaxes, axes, spades and hoes.
+* Crafting helmets, chestplates, legguards and boots.
+* Crafting custom normal blocks.
+* Crafting and generating custom ores.
+* Modifying and deleting content via an in-game interface.
+* Configuring durability, damage, mining speed and harvesting efficiency.
+* Configuring armour defence and resistance.
+* Management of ore drops, veins and spawn heights.
+* Automatic sorting of items into categories in the creative menu.
+* Vanilla animations for tools when used in hand.
+* Block placement fix to prevent rollbacks and ghost blocks.
+* Compatibility with older Tank, Nexium, Azurite and Auralite content.
 
-## Prérequis
+## Prerequisites
 
-* Un serveur **PocketMine-MP 5**.
-* Le plugin **Customies** compatible avec la version du serveur.
-* Un pack de ressources contenant les textures et les modèles des items et blocs personnalisés.
+* A **PocketMine-MP 5** server.
+* The **Customies** plugin, compatible with the server version.
+* A resource pack containing textures and models for custom items and blocks.
 
 ## Installation
 
-1. Arrêtez complètement le serveur.
-2. Installez `ItemsPlus.phar` dans le dossier `plugins/`.
-3. Installez également **Customies** dans `plugins/`.
-4. Conservez ou installez le pack de ressources contenant les textures personnalisées.
-5. Supprimez les anciens plugins séparés `ItemsPlus` et `MineraisPlus` afin d’éviter les conflits d’identifiants et de commandes.
-6. Redémarrez complètement le serveur.
+1. Shut down the server completely.
+2. Install `ItemsPlus.phar` in the `plugins/` folder.
+3. Also install **Customies** in `plugins/`.
+4. Keep or install the resource pack containing the custom textures.
+5. Remove the old separate `ItemsPlus` and `MineraisPlus` plugins to avoid conflicts with identifiers and commands.
+6. Restart the server completely.
 
-La configuration principale est créée dans :
+The main configuration is created in:
 
 ```text
 plugin_data/ItemsPlus/config.yml
 ```
 
-> Après la création, la modification ou la suppression d’un contenu Customies, un arrêt puis un redémarrage complet du serveur est nécessaire.
+> After creating, editing or deleting Customies content, the server must be shut down and then fully restarted.
 
-## Commandes
+## Orders
 
 ### `/itemsplus`
 
-Commande principale permettant de lister, donner et équiper les items personnalisés.
+Main command for listing, assigning and equipping custom items.
+  
+| Command                                      | Description                                         |
+| -------------------------------------------- | ----------------------------------------- -------   |
+| `/itemsplus`                                 | Displays the list of available items.               |
+| `/itemsplus list`                            | Displays all saved items.                           |
+| `/itemsplus give <item> [quantity]`          | Gives an item to the player who enters the command. |
+| `/itemsplus give <player> <item> [quantity]` | Gives an item to another player.                    |
+| `/itemsplus equip tank`                      | Equips the Tank set on yourself.                    |
+| `/itemsplus equip nexium`                    | Equips the Nexium set on yourself.                  |
+| `/itemsplus equip <player> tank`             | Equips the Tank set on a player.                    |
+| `/itemsplus equip <player> nexium`           | Equips the Nexium set on a player.                  |
+| `/itemsplus id <item>`                       | Displays the full ID of an item.                    |
+| `/itemsplus identifier <item>`               | Alias for `/itemsplus id`.                          |
 
-| Commande                                     | Description                                      |
-| -------------------------------------------- | ------------------------------------------------ |
-| `/itemsplus`                                 | Affiche la liste des items disponibles.          |
-| `/itemsplus list`                            | Affiche tous les items enregistrés.              |
-| `/itemsplus give <item> [quantité]`          | Donne un item au joueur qui exécute la commande. |
-| `/itemsplus give <joueur> <item> [quantité]` | Donne un item à un autre joueur.                 |
-| `/itemsplus equip tank`                      | Équipe le set Tank sur soi.                      |
-| `/itemsplus equip nexium`                    | Équipe le set Nexium sur soi.                    |
-| `/itemsplus equip <joueur> tank`             | Équipe le set Tank sur un joueur.                |
-| `/itemsplus equip <joueur> nexium`           | Équipe le set Nexium sur un joueur.              |
-| `/itemsplus id <item>`                       | Affiche l’identifiant complet d’un item.         |
-| `/itemsplus identifier <item>`               | Alias de `/itemsplus id`.                        |
+The quantity is limited to between **1 and 64**.
 
-La quantité est limitée entre **1 et 64**.
-
-Permission : `itemsplus.command` — opérateurs par défaut.
+Permission: `itemsplus.command` — default operators.
 
 ### `/createitem`
 
-Ouvre le créateur de contenu personnalisé en jeu.
+Opens the in-game custom content creator.
 
-| Commande              | Description                                      |
-| --------------------- | ------------------------------------------------ |
-| `/createitem`         | Ouvre le menu principal de création.             |
-| `/createitem minerai` | Ouvre directement le créateur de minerai.        |
-| `/createitem bloc`    | Ouvre directement le créateur de bloc normal.    |
-| `/createitem manage`  | Ouvre directement le gestionnaire des créations. |
+| Command               | Description                                       |
+| --------------------- | ----------------------------------------------- - |
+| `/createitem`         | Opens the main creation menu.                     |
+| `/createitem ore`     |  Opens the ore creator directly.                  |
+| `/createitem block`   | Opens the normal block creator directly.          |
+| `/createitem manage`  | Opens the creation manager directly.              |
 
 Alias : `/itemcreator`, `/icreate`
 
 Permission : `itemsplus.createitem` — opérateurs par défaut.
 
-Types disponibles :
+Available types:
 
-* Item simple
-* Épée
-* Pioche
-* Hache
-* Pelle
-* Houe
-* Casque
-* Plastron
-* Jambières
-* Bottes
-* Minerai
-* Bloc normal
+* Basic item
+* Sword
+* Pickaxe
+* Axe
+* Shovel
+* Hoe
+* Helmet
+* Chestplate
+* Leggings
+* Boots
+* Ore
+* Normal block
 
 ### `/createminerai`
 
-Ouvre directement le créateur de minerai personnalisé.
+Opens the custom ore creator directly.
 
-Alias : `/createore`
+Alias: `/createore`
 
-Permission : `itemsplus.createitem` — opérateurs par défaut.
+Permission: `itemsplus.createitem` — operators by default.
 
 ### `/createblock`
 
-Ouvre directement le créateur de bloc normal personnalisé.
+Opens the standard custom block creator directly.
 
-Alias : `/createbloc`
+Alias: `/createbloc`
 
-Permission : `itemsplus.createitem` — opérateurs par défaut.
+Permission: `itemsplus.createitem` — operators by default.
 
 ### `/manageitem`
 
-Ouvre le gestionnaire permettant de modifier ou supprimer les créations.
+Opens the manager allowing you to edit or delete creations.
 
 Alias : `/edititem`, `/itemmanager`, `/gereritem`
 
-Permission : `itemsplus.manage` — opérateurs par défaut.
+Permission: `itemsplus.manage` — default operators.
 
-Éléments modifiables :
+Editable items:
 
-* Items simples : nom, texture, affichage créatif et résistance au feu.
-* Outils : nom, texture, durabilité, dégâts, vitesse de minage, niveau de récolte, enchantabilité, usure, tags et catégorie créative.
-* Armures : nom, texture, durabilité, défense, toughness, résistance au feu et catégorie créative.
-* Minerais : nom, texture, dureté, hauteurs, filons, drop, quantité, chance et génération.
-* Blocs normaux : nom, texture, dureté et affichage créatif.
+* Simple items: name, texture, creative display and fire resistance.
+* Tools: name, texture, durability, damage, mining speed, harvesting level, enchantability, wear, tags and creative category.
+* Armour: name, texture, durability, defence, toughness, fire resistance and creative category.
+* Ore: name, texture, hardness, heights, veins, drop, quantity, chance and generation.
+* Normal blocks: name, texture, hardness and creative view.
 
-La suppression d’un élément demande une confirmation en saisissant `SUPPRIMER`.
+Deleting an item requires confirmation by typing `DELETE`.
 
-### `/minerais`
+### `/minerals`
 
-Commande de génération des minerais personnalisés.
+Command for generating custom minerals.
+  
+| Command                       | Description                                              |
+| ----------------------------- | ------------------------------------ -----------------   |
+| `/minerals c [radius]`        | Generates custom ores around the player.                 |
+| `/minerals <world> <ore>`     | Starts ore generation on the specified map.              |
 
-| Commande                      | Description                                           |
-| ----------------------------- | ----------------------------------------------------- |
-| `/minerais c [rayon]`         | Génère les minerais personnalisés autour du joueur.   |
-| `/minerais <monde> <minerai>` | Lance la génération du minerai sur la carte indiquée. |
-
-Exemples :
+Examples:
 
 ```text
-/minerais c 100
-/minerais world azurite
+/minerals c 100
+/minerals world azurite
 ```
 
-Le rayon de génération locale est limité entre **8 et 256 blocs**.
+The local spawn radius is limited to between **8 and 256 blocks**.
 
-Permission : `minerais.command` — opérateurs par défaut.
+Permission: `minerals.command` — operators by default.
 
 ## Permissions
 
-| Permission             | Description                          | Valeur par défaut |
-| ---------------------- | ------------------------------------ | ----------------- |
-| `itemsplus.command`    | Utiliser `/itemsplus`.               | OP                |
-| `itemsplus.createitem` | Créer des items, blocs et minerais.  | OP                |
-| `itemsplus.manage`     | Modifier ou supprimer les créations. | OP                |
-| `minerais.command`     | Utiliser `/minerais`.                | OP                |
+| Permission             | Description                          | Default value     |
+| ---------------------- | ------------------------------------ | ---------------- -|
+| `itemsplus.command`    | Use `/itemsplus`.                    | OP                |
+| `itemsplus.createitem` | Create items, blocks and ores.       | OP                |
+| `itemsplus.manage`     | Edit or delete creations.            | OP                |
+| `minerais.command`     | Use `/minerais`.                     | OP                |
 
 ## Configuration
 
-Tout le contenu personnalisé est regroupé dans :
+All custom content is grouped in:
 
 ```text
 plugin_data/ItemsPlus/config.yml
 ```
 
-Le fichier peut contenir notamment les sections suivantes :
+The file may contain the following sections, amongst others:
 
 * `items`
 * `tools`
-* `armor`
+* `armour`
 * `minerals`
 * `blocks`
+The old `plugin_data/MineraisPlus/config.yml` file can be imported automatically on first launch if the `minerals` section does not yet exist.
 
-L’ancien fichier `plugin_data/MineraisPlus/config.yml` peut être importé automatiquement au premier démarrage lorsque la section `minerals` n’existe pas encore.
+## Resource pack
 
-## Pack de ressources
+The plugin saves items and blocks on the server side, but the textures must be included in the resource pack.
 
-Le plugin enregistre les items et blocs côté serveur, mais les textures doivent être présentes dans le pack de ressources.
+For items:
 
-Pour les items :
+* add the PNG files to the resource pack;
+* declare their texture keys in the relevant files.
 
-* ajoutez les fichiers PNG dans le pack ;
-* déclarez leurs clés de texture dans les fichiers correspondants.
+For blocks and ores:
 
-Pour les blocs et minerais :
+* add the textures to `textures/`...
 
-* ajoutez les textures dans `textures/` ;
-* déclarez-les dans `textures/terrain_texture.json` ;
-* ajoutez les informations nécessaires dans `blocks.json`.
+* add the textures to `textures/`;
+* declare them in `textures/terrain_texture.json`;
+* add the necessary information to `blocks.json`.
 
-Le nom de texture saisi dans l’interface ItemsPlus doit correspondre exactement à la clé déclarée dans le pack.
+The texture name entered in the ItemsPlus interface must match exactly the key declared in the pack.
 
-## Menu créatif
+## Creative Menu
 
-ItemsPlus range automatiquement le contenu dans les catégories appropriées :
+ItemsPlus automatically organises content into the appropriate categories:
 
-* outils et armes dans les groupes vanilla correspondants ;
-* armures dans la catégorie des équipements ;
-* blocs normaux dans **Construction / Pierre** ;
-* minerais dans **Nature / Minerais**.
+* tools and weapons in the corresponding vanilla groups;
+* armour in the equipment category;
+* normal blocks in **Construction / Stone**;
+* ores in **Nature / Ores**.
 
-Le correctif actuel conserve les entrées créatives enregistrées par Customies afin d’éviter les désynchronisations entre le client et le serveur, les blocs fantômes et les rollbacks pendant la pose rapide.
+The current patch preserves creative entries saved by Customies to prevent desynchronisation between the client and the server, ghost blocks and rollbacks during quick placement.
 
-## Structure du projet
+## Project structure
 
 ```text
 ItemsPlus/
@@ -234,14 +235,13 @@ ItemsPlus/
             └── minerals/
 ```
 
-## Remarques importantes
+## Important notes
 
-* Ne laissez pas l’ancien plugin `MineraisPlus.phar` installé en même temps.
-* Ne changez pas un identifiant déjà utilisé sans supprimer correctement l’ancien contenu.
-* Les identifiants Customies sont enregistrés au démarrage du serveur.
-* Les textures manquantes apparaîtront comme des objets ou blocs invisibles ou incorrects côté client.
-* Effectuez toujours un arrêt complet avant de remplacer le plugin ou de modifier le pack de ressources.
+* Do not change an ID that is already in use without properly deleting the old content.
+* Customies IDs are saved when the server starts up.
+* Missing textures will appear as invisible or incorrect objects or blocks on the client side.
+* Always perform a full shutdown before replacing the plugin or modifying the resource pack.
 
-## Auteur
+## Author
 
-Développé par **Nest**.
+Developed by **Nest**.
