@@ -1,0 +1,50 @@
+name: ItemsPlus
+main: nestouille\itemsplus\Main
+version: 2.4.5-block-placement-rollback-fix
+api: 5.0.0
+author: Nest
+load: STARTUP
+depend:
+  - Customies
+commands:
+  itemsplus:
+    description: Donne, liste et équipe les items basic, outils et armures custom
+    usage: /itemsplus list | /itemsplus give [joueur] <item> [quantite] | /itemsplus equip [joueur] tank|nexium
+    permission: itemsplus.command
+  minerais:
+    description: Génère les minerais custom du module ItemsPlus
+    usage: /minerais c [rayon] ou /minerais <monde> <minerais>
+    permission: minerais.command
+  createitem:
+    description: Ouvre le créateur en jeu des items, blocs, minerais, outils et armures custom
+    usage: /createitem [bloc|minerai]
+    aliases: [itemcreator, icreate]
+    permission: itemsplus.createitem
+  createminerai:
+    description: Ouvre directement le créateur de minerai personnalisé
+    usage: /createminerai
+    aliases: [createore]
+    permission: itemsplus.createitem
+  createblock:
+    description: Ouvre directement le créateur de bloc normal personnalisé
+    usage: /createblock
+    aliases: [createbloc]
+    permission: itemsplus.createitem
+  manageitem:
+    description: Modifie ou supprime les items, outils, armures, blocs et minerais en jeu
+    usage: /manageitem
+    aliases: [edititem, itemmanager, gereritem]
+    permission: itemsplus.manage
+permissions:
+  itemsplus.command:
+    description: Permet d'utiliser la commande /itemsplus
+    default: op
+  minerais.command:
+    description: Permet d'utiliser la commande /minerais
+    default: op
+  itemsplus.createitem:
+    description: Permet de créer des items, blocs et minerais custom depuis une interface en jeu
+    default: op
+  itemsplus.manage:
+    description: Permet de modifier et supprimer les items, blocs et minerais depuis une interface en jeu
+    default: op
