@@ -1,0 +1,14 @@
+--- # Poggit-CI Manifest
+
+build-by-default: true
+
+branches:
+  - main
+
+projects:
+  ItemsPlus:
+    path: "ItemsCreatorOreAndArmor"
+    lint:
+      phpstan: false
+
+...
