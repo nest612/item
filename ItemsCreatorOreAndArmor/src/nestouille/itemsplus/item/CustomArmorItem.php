@@ -12,7 +12,9 @@ use pocketmine\inventory\ArmorInventory;
 use pocketmine\item\Armor;
 use pocketmine\item\ArmorTypeInfo;
 use pocketmine\item\ItemIdentifier;
+use pocketmine\item\enchantment\VanillaEnchantments;
 use pocketmine\utils\TextFormat as TF;
+use pocketmine\utils\Utils;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionNamedType;
@@ -91,6 +93,30 @@ final class CustomArmorItem extends Armor implements ItemComponents{
         $this->refreshDurabilityLore();
     }
 
+
+    /**
+     * Applique Solidité exactement comme une armure vanilla de PocketMine.
+     * Chaque point d'usure personnalisé est testé séparément : sur une armure,
+     * Solidité ne peut protéger que 40 % des tentatives au maximum, puis le
+     * niveau de l'enchantement détermine la chance d'annuler l'usure.
+     */
+    protected function getUnbreakingDamageReduction(int $amount) : int{
+        $unbreakingLevel = $this->getEnchantmentLevel(VanillaEnchantments::UNBREAKING());
+        if($unbreakingLevel <= 0 || $amount <= 0){
+            return 0;
+        }
+
+        $negated = 0;
+        $damageChance = 1 / ($unbreakingLevel + 1);
+
+        for($i = 0; $i < $amount; ++$i){
+            if(mt_rand(1, 100) > 60 && Utils::getRandomFloat() > $damageChance){
+                ++$negated;
+            }
+        }
+
+        return $negated;
+    }
 
     public function refreshDurabilityLore() : bool{
         $maxDurability = max(1, $this->getMaxDurability());

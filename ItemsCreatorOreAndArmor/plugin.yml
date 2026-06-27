@@ -1,72 +1,50 @@
----
 name: ItemsPlus
 main: nestouille\itemsplus\Main
-version: "2.4.5"
-api: "5.0.0"
-author: Nest
-description: Create and manage custom items, tools, armor, blocks and ores in-game using Customies.
-prefix: ItemsPlus
+version: 2.5.1-random-armor-wear
+api: 5.0.0
+author: NestOuille82
 load: STARTUP
-
 depend:
   - Customies
-
 commands:
   itemsplus:
-    description: List, give and equip custom items, tools and armor.
-    usage: "/itemsplus list | /itemsplus give [player] <item> [quantity] | /itemsplus equip [player] <set>"
+    description: Donne, liste et équipe les items basic, outils et armures custom
+    usage: /itemsplus list | /itemsplus give [joueur] <item> [quantite] | /itemsplus equip [joueur] tank|nexium
     permission: itemsplus.command
-
   minerais:
-    description: Generate custom ores registered by ItemsPlus.
-    usage: "/minerais c [radius] | /minerais <world> <ore>"
+    description: Génère les minerais custom du module ItemsPlus
+    usage: /minerais c [rayon] ou /minerais <monde> <minerais>
     permission: minerais.command
-
   createitem:
-    description: Open the in-game creator for custom items, blocks, ores, tools and armor.
-    usage: "/createitem [bloc|minerai|manage]"
-    aliases:
-      - itemcreator
-      - icreate
+    description: Ouvre le créateur en jeu des items, blocs, minerais, outils et armures custom
+    usage: /createitem [bloc|minerai]
+    aliases: [itemcreator, icreate]
     permission: itemsplus.createitem
-
   createminerai:
-    description: Open the custom ore creator directly.
-    usage: "/createminerai"
-    aliases:
-      - createore
+    description: Ouvre directement le créateur de minerai personnalisé
+    usage: /createminerai
+    aliases: [createore]
     permission: itemsplus.createitem
-
   createblock:
-    description: Open the standard custom block creator directly.
-    usage: "/createblock"
-    aliases:
-      - createbloc
+    description: Ouvre directement le créateur de bloc normal personnalisé
+    usage: /createblock
+    aliases: [createbloc]
     permission: itemsplus.createitem
-
   manageitem:
-    description: Edit or delete custom items, tools, armor, blocks and ores.
-    usage: "/manageitem"
-    aliases:
-      - edititem
-      - itemmanager
-      - gereritem
+    description: Modifie ou supprime les items, outils, armures, blocs et minerais en jeu
+    usage: /manageitem
+    aliases: [edititem, itemmanager, gereritem]
     permission: itemsplus.manage
-
 permissions:
   itemsplus.command:
-    description: Allows the user to run /itemsplus.
+    description: Permet d'utiliser la commande /itemsplus
     default: op
-
   minerais.command:
-    description: Allows the user to run /minerais.
+    description: Permet d'utiliser la commande /minerais
     default: op
-
   itemsplus.createitem:
-    description: Allows the user to create custom items, blocks and ores in-game.
+    description: Permet de créer des items, blocs et minerais custom depuis une interface en jeu
     default: op
-
   itemsplus.manage:
-    description: Allows the user to edit and delete custom content in-game.
+    description: Permet de modifier et supprimer les items, blocs et minerais depuis une interface en jeu
     default: op
-...

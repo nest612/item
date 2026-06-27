@@ -44,7 +44,7 @@ final class CustomToolItem extends Tool implements ItemComponents{
     private const DURABILITY_LORE_WORD = "Durabilité";
 
     /**
-     * @var array<string, array{texture: string, toolType: string, blockToolType: int, harvestLevel: int, attackDamage: int, durability: int, miningEfficiency: float, enchantability: int, fireProof: bool, blockDurabilityDamage: int, entityDurabilityDamage: int, diggerTags: string[], creativeInfo: CreativeInventoryInfo|null}>
+     * @var array<string, array{texture: string, toolType: string, blockToolType: int, harvestLevel: int, attackDamage: int, durability: int, miningEfficiency: float, enchantability: int, fireProof: bool, blockDurabilityDamage: int, entityDurabilityDamage: int, armorDurabilityDamage: int, diggerTags: string[], diggerBlocks: string[], creativeInfo: CreativeInventoryInfo|null}>
      */
     private static array $configs = [];
 
@@ -61,7 +61,9 @@ final class CustomToolItem extends Tool implements ItemComponents{
         bool $fireProof = false,
         int $blockDurabilityDamage = 1,
         int $entityDurabilityDamage = 2,
+        int $armorDurabilityDamage = -1,
         array $diggerTags = [],
+        array $diggerBlocks = [],
         ?CreativeInventoryInfo $creativeInfo = null
     ) : void{
         $textureName = strtolower(trim($textureName));
@@ -86,7 +88,9 @@ final class CustomToolItem extends Tool implements ItemComponents{
             "fireProof" => $fireProof,
             "blockDurabilityDamage" => max(0, $blockDurabilityDamage),
             "entityDurabilityDamage" => max(0, $entityDurabilityDamage),
+            "armorDurabilityDamage" => max(-1, $armorDurabilityDamage),
             "diggerTags" => array_values($diggerTags),
+            "diggerBlocks" => array_values($diggerBlocks),
             "creativeInfo" => $creativeInfo
         ];
     }
@@ -139,9 +143,40 @@ final class CustomToolItem extends Tool implements ItemComponents{
     }
 
     public function getMiningEfficiency(bool $isCorrectTool) : float{
-        // Mode simple : la valeur breaking_speed/mining_efficiency s'applique à tous les blocs côté serveur.
-        // Le boost Haste ajouté par Main synchronise aussi la sensation côté client Bedrock.
-        return $this->getBaseMiningEfficiency();
+        // La vitesse personnalisée ne s'applique que lorsque le bloc correspond réellement à l'outil.
+        return $isCorrectTool ? $this->getBaseMiningEfficiency() : 1.0;
+    }
+
+    public function getCustomToolType() : string{
+        return strtolower((string) (self::$configs[$this->name]["toolType"] ?? "tool"));
+    }
+
+    /**
+     * Retourne l'usure maximale aléatoire imposée à chaque pièce d'armure.
+     * Exemple : 2 produit 1 ou 2 points d'usure à chaque coup.
+     * null conserve le calcul vanilla basé sur les dégâts de l'attaque.
+     */
+    public function getArmorDurabilityDamage() : ?int{
+        $damage = (int) (self::$configs[$this->name]["armorDurabilityDamage"] ?? -1);
+        return $damage < 0 ? null : max(1, $damage);
+    }
+
+    /**
+     * Les outils de minage personnalisés sont volontairement stricts :
+     * pioche = blocs de pioche, hache = blocs de hache, pelle = blocs de pelle,
+     * houe = blocs de houe. Les épées et objets génériques gardent leur comportement normal.
+     */
+    public function canMineBlock(Block $block) : bool{
+        if(!in_array($this->getCustomToolType(), ["pickaxe", "pioche", "axe", "hache", "shovel", "pelle", "hoe", "houe"], true)){
+            return true;
+        }
+
+        $toolType = $this->getBlockToolType();
+        $requiredToolType = $block->getBreakInfo()->getToolType();
+
+        // 0 signifie qu'aucun de ces outils n'est prévu pour ce bloc.
+        // Le test bit-à-bit garde la compatibilité avec les blocs acceptant plusieurs catégories.
+        return $toolType !== 0 && $requiredToolType !== 0 && ($requiredToolType & $toolType) !== 0;
     }
 
     /**
@@ -244,7 +279,7 @@ final class CustomToolItem extends Tool implements ItemComponents{
      */
     private function addVanillaToolAnimation(string $toolType) : void{
         $toolType = strtolower(trim($toolType));
-        if(!in_array($toolType, ["pickaxe", "pioche", "axe", "hache", "shovel", "pelle"], true)){
+        if(!in_array($toolType, ["pickaxe", "pioche", "axe", "hache", "shovel", "pelle", "hoe", "houe"], true)){
             return;
         }
 
@@ -263,13 +298,21 @@ final class CustomToolItem extends Tool implements ItemComponents{
         if($tags === []){
             $tags = self::getDefaultDiggerTagsForType($toolType);
         }
+        $blocks = $config["diggerBlocks"] ?? [];
 
-        if($tags === [] || $this->hasComponent("minecraft:digger")){
+        if($tags === [] && $blocks === []){
             return;
         }
 
-        $speed = (int) max(1, min(100, (int) ($config["miningEfficiency"] ?? 1)));
-        $this->addComponent(new SimpleDiggerComponent($tags, $speed, true));
+        // Bedrock exige un entier pour minecraft:digger.destroy_speeds.speed.
+        // La valeur serveur peut rester décimale, mais la valeur envoyée au client
+        // est arrondie proprement afin d'éviter que le composant entier soit rejeté.
+        $configuredSpeed = (float) ($config["miningEfficiency"] ?? 1.0);
+        $clientSpeed = (int) max(1, min(1000, (int) round($configuredSpeed)));
+
+        // addComponent remplace une éventuelle ancienne définition minecraft:digger.
+        // Une vitesse comme 9 est donc envoyée comme 9, jamais comme 9.0.
+        $this->addComponent(new SimpleDiggerComponent($tags, $clientSpeed, true, $blocks));
     }
 
     private function initCustomiesComponent(string $textureName, ?CreativeInventoryInfo $creativeInfo) : void{

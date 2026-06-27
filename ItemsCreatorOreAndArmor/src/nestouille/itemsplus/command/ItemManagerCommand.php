@@ -340,9 +340,10 @@ final class ItemManagerCommand implements CommandExecutor{
             $updated["enchantability"] = $this->toInt($data[7] ?? 0, 0, 1000);
             $updated["block_durability_damage"] = $this->toInt($data[8] ?? 1, 0, 1000);
             $updated["entity_durability_damage"] = $this->toInt($data[9] ?? 1, 0, 1000);
-            $updated["digger_tags"] = $this->parseTags((string) ($data[10] ?? ""));
-            $updated["creative"] = (bool) ($data[11] ?? true);
-            $updated["fireproof"] = (bool) ($data[12] ?? false);
+            $updated["armor_durability_damage"] = $this->toInt($data[10] ?? -1, -1, 1000);
+            $updated["digger_tags"] = $this->parseTags((string) ($data[11] ?? ""));
+            $updated["creative"] = (bool) ($data[12] ?? true);
+            $updated["fireproof"] = (bool) ($data[13] ?? false);
             $this->saveItemEdit($player, $key, $updated);
         });
 
@@ -358,6 +359,7 @@ final class ItemManagerCommand implements CommandExecutor{
             ->addInput("Enchantabilité", "0 à 1000", (string) ($definition["enchantability"] ?? 10))
             ->addInput("Durabilité perdue sur un bloc", "0 à 1000", (string) ($definition["block_durability_damage"] ?? 1))
             ->addInput("Durabilité perdue sur une entité", "0 à 1000", (string) ($definition["entity_durability_damage"] ?? 1))
+            ->addInput("Usure maximale aléatoire de chaque pièce d'armure", "-1 = automatique, 1 = toujours 1, 2 = aléatoirement 1 ou 2", (string) ($definition["armor_durability_damage"] ?? -1))
             ->addInput("Tags de blocs, séparés par des virgules", "exemple : mineable/pickaxe", $tagText)
             ->addToggle("Afficher dans le menu créatif", (bool) ($definition["creative"] ?? true))
             ->addToggle("Résiste au feu / lave", (bool) ($definition["fireproof"] ?? $definition["fireProof"] ?? false));

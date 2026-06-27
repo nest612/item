@@ -14,13 +14,13 @@ use nestouille\itemsplus\blocks\BlocksManager;
 use nestouille\itemsplus\item\CustomArmorItem;
 use nestouille\itemsplus\item\CustomTextureItem;
 use nestouille\itemsplus\item\CustomToolItem;
+use nestouille\itemsplus\listener\ToolBehaviorListener;
+use nestouille\itemsplus\listener\ArmorDurabilityListener;
 use nestouille\itemsplus\minerals\MineralsManager;
 use nestouille\itemsplus\minerals\command\MineraisCommand;
 use pocketmine\block\BlockToolType;
 use pocketmine\inventory\ArmorInventory;
 use pocketmine\inventory\CreativeInventory;
-use pocketmine\entity\effect\EffectInstance;
-use pocketmine\entity\effect\VanillaEffects;
 use pocketmine\item\Item;
 use pocketmine\item\ItemIdentifier;
 use pocketmine\item\ItemTypeIds;
@@ -42,7 +42,6 @@ use function explode;
 use function implode;
 use function is_array;
 use function is_string;
-use function round;
 use function str_contains;
 use function strtolower;
 use function trim;
@@ -64,7 +63,8 @@ final class Main extends PluginBase{
             "harvest_level" => 6,
             "enchantability" => 15,
             "block_durability_damage" => 2,
-            "entity_durability_damage" => 1
+            "entity_durability_damage" => 1,
+            "armor_durability_damage" => -1,
         ],
         "pioche_obsidienne" => [
             "namespace" => "itemsplus",
@@ -79,7 +79,8 @@ final class Main extends PluginBase{
             "harvest_level" => 6,
             "enchantability" => 15,
             "block_durability_damage" => 1,
-            "entity_durability_damage" => 2
+            "entity_durability_damage" => 2,
+            "armor_durability_damage" => -1,
         ],
         "hache_dragon" => [
             "namespace" => "itemsplus",
@@ -94,7 +95,8 @@ final class Main extends PluginBase{
             "harvest_level" => 6,
             "enchantability" => 15,
             "block_durability_damage" => 1,
-            "entity_durability_damage" => 2
+            "entity_durability_damage" => 2,
+            "armor_durability_damage" => -1,
         ],
         "pelle_dragon" => [
             "namespace" => "itemsplus",
@@ -109,7 +111,8 @@ final class Main extends PluginBase{
             "harvest_level" => 6,
             "enchantability" => 15,
             "block_durability_damage" => 1,
-            "entity_durability_damage" => 2
+            "entity_durability_damage" => 2,
+            "armor_durability_damage" => -1,
         ],
         "houe_dragon" => [
             "namespace" => "itemsplus",
@@ -124,7 +127,8 @@ final class Main extends PluginBase{
             "harvest_level" => 6,
             "enchantability" => 15,
             "block_durability_damage" => 1,
-            "entity_durability_damage" => 1
+            "entity_durability_damage" => 1,
+            "armor_durability_damage" => -1,
         ],
         "casque_tank" => [
             "namespace" => "itemsplus",
@@ -258,7 +262,8 @@ final class Main extends PluginBase{
             "harvest_level" => 7,
             "enchantability" => 18,
             "block_durability_damage" => 2,
-            "entity_durability_damage" => 1
+            "entity_durability_damage" => 1,
+            "armor_durability_damage" => -1,
         ],
         "pioche_nexium" => [
             "namespace" => "itemsplus",
@@ -273,7 +278,8 @@ final class Main extends PluginBase{
             "harvest_level" => 7,
             "enchantability" => 18,
             "block_durability_damage" => 1,
-            "entity_durability_damage" => 2
+            "entity_durability_damage" => 2,
+            "armor_durability_damage" => -1,
         ],
         "hache_nexium" => [
             "namespace" => "itemsplus",
@@ -288,7 +294,8 @@ final class Main extends PluginBase{
             "harvest_level" => 7,
             "enchantability" => 18,
             "block_durability_damage" => 1,
-            "entity_durability_damage" => 2
+            "entity_durability_damage" => 2,
+            "armor_durability_damage" => -1,
         ],
         "pelle_nexium" => [
             "namespace" => "itemsplus",
@@ -303,7 +310,8 @@ final class Main extends PluginBase{
             "harvest_level" => 7,
             "enchantability" => 18,
             "block_durability_damage" => 1,
-            "entity_durability_damage" => 2
+            "entity_durability_damage" => 2,
+            "armor_durability_damage" => -1,
         ],
         "houe_nexium" => [
             "namespace" => "itemsplus",
@@ -318,7 +326,8 @@ final class Main extends PluginBase{
             "harvest_level" => 7,
             "enchantability" => 18,
             "block_durability_damage" => 1,
-            "entity_durability_damage" => 1
+            "entity_durability_damage" => 1,
+            "armor_durability_damage" => -1,
         ]
     ];
 
@@ -412,7 +421,8 @@ final class Main extends PluginBase{
         $this->mineralsManager = new MineralsManager($this);
         $this->mineralsManager->enable();
 
-        $this->scheduleSimpleBreakingSpeedTask();
+        $this->getServer()->getPluginManager()->registerEvents(new ToolBehaviorListener(), $this);
+        $this->getServer()->getPluginManager()->registerEvents(new ArmorDurabilityListener($this), $this);
         $this->scheduleDurabilityLoreTask();
 
         $command = $this->getCommand("itemsplus");
@@ -650,7 +660,13 @@ final class Main extends PluginBase{
                     $fireProof = (bool) ($data["fireproof"] ?? $data["fireProof"] ?? false);
                     $blockDurabilityDamage = (int) ($data["block_durability_damage"] ?? $data["blockDurabilityDamage"] ?? ($toolType === "sword" ? 2 : 1));
                     $entityDurabilityDamage = (int) ($data["entity_durability_damage"] ?? $data["entityDurabilityDamage"] ?? ($toolType === "hoe" ? 1 : ($toolType === "sword" ? 1 : 2)));
+                    $armorDurabilityDamage = (int) ($data["armor_durability_damage"] ?? $data["armorDurabilityDamage"] ?? -1);
                     $diggerTags = $this->parseStringList($data["digger_tags"] ?? $data["diggerTags"] ?? $data["destroy_tags"] ?? $data["destroyTags"] ?? []);
+                    $diggerBlocks = $this->parseStringList($data["digger_blocks"] ?? $data["diggerBlocks"] ?? []);
+                    $diggerBlocks = array_values(array_unique(array_merge(
+                        $diggerBlocks,
+                        $this->getConfiguredDiggerBlocksForTool($toolType)
+                    )));
 
                     $this->registerCustomToolItem(
                         $identifier,
@@ -666,7 +682,9 @@ final class Main extends PluginBase{
                         $fireProof,
                         $blockDurabilityDamage,
                         $entityDurabilityDamage,
+                        $armorDurabilityDamage,
                         $diggerTags,
+                        $diggerBlocks,
                         $creativeInfoForPlacement = $creative ? $this->makeToolCreativeInfo($toolType, $data) : null
                     );
                     $this->toolBreakingSpeedsByName[$name] = $miningEfficiency;
@@ -736,30 +754,6 @@ final class Main extends PluginBase{
         }
 
         return false;
-    }
-
-    private function scheduleSimpleBreakingSpeedTask() : void{
-        $this->getScheduler()->scheduleRepeatingTask(new ClosureTask(function() : void{
-            foreach($this->getServer()->getOnlinePlayers() as $player){
-                $speed = $this->getSimpleBreakingSpeedForItem($player->getInventory()->getItemInHand());
-                if($speed === null || $speed <= 1.0){
-                    continue;
-                }
-
-                // Effet universel côté client : plus breaking_speed est haut, plus le bloc se casse vite.
-                // Exemple : 6.0 = rapide, 12.0 = très rapide, 25.0 = presque instantané.
-                $amplifier = (int) max(0, min(30, round($speed) - 1));
-                $player->getEffects()->add(new EffectInstance(VanillaEffects::HASTE(), 45, $amplifier, false));
-            }
-        }), 20);
-    }
-
-    private function getSimpleBreakingSpeedForItem(Item $item) : ?float{
-        if(!$item instanceof CustomToolItem){
-            return null;
-        }
-
-        return $this->toolBreakingSpeedsByName[$item->getName()] ?? null;
     }
 
     private function registerCustomItem(string $identifier, string $name, string $texture, ?CreativeInventoryInfo $creativeInfo) : void{
@@ -838,6 +832,49 @@ final class Main extends PluginBase{
         $factory->registerItem(CustomArmorItem::class, $identifier, $name);
     }
 
+    /**
+     * @return string[] Identifiants exacts des blocs personnalisés qui doivent
+     *                  utiliser la vitesse configurée côté client Bedrock.
+     */
+    private function getConfiguredDiggerBlocksForTool(string $toolType) : array{
+        $toolType = strtolower(trim($toolType));
+        $result = [];
+
+        // Tous les minerais personnalisés sont enregistrés comme blocs de pioche.
+        if(in_array($toolType, ["pickaxe", "pioche"], true)){
+            $minerals = $this->getConfig()->get("minerals", []);
+            if(is_array($minerals)){
+                foreach($minerals as $key => $data){
+                    if(!is_array($data)){
+                        continue;
+                    }
+                    $namespace = strtolower((string) ($data["namespace"] ?? "mineraisplus"));
+                    $oreId = strtolower((string) ($data["ore_id"] ?? (strtolower((string) $key) . "_ore")));
+                    $result[] = $namespace . ":" . $oreId;
+                }
+            }
+        }
+
+        // Les blocs normaux peuvent déclarer explicitement tool_type dans config.yml.
+        $blocks = $this->getConfig()->get("blocks", []);
+        if(is_array($blocks)){
+            foreach($blocks as $key => $data){
+                if(!is_array($data)){
+                    continue;
+                }
+                $blockTool = strtolower((string) ($data["tool_type"] ?? $data["toolType"] ?? ""));
+                if($blockTool === "" || $this->resolveToolType($blockTool, "") !== $this->resolveToolType($toolType, "")){
+                    continue;
+                }
+                $namespace = strtolower((string) ($data["namespace"] ?? "itemsplus"));
+                $id = strtolower((string) ($data["id"] ?? $key));
+                $result[] = $namespace . ":" . $id;
+            }
+        }
+
+        return array_values(array_unique($result));
+    }
+
     private function registerCustomToolItem(
         string $identifier,
         string $name,
@@ -852,7 +889,9 @@ final class Main extends PluginBase{
         bool $fireProof,
         int $blockDurabilityDamage,
         int $entityDurabilityDamage,
+        int $armorDurabilityDamage,
         array $diggerTags,
+        array $diggerBlocks,
         ?CreativeInventoryInfo $creativeInfo
     ) : void{
         $factory = CustomiesItemFactory::getInstance();
@@ -870,7 +909,9 @@ final class Main extends PluginBase{
             $fireProof,
             $blockDurabilityDamage,
             $entityDurabilityDamage,
+            $armorDurabilityDamage,
             $diggerTags,
+            $diggerBlocks,
             $creativeInfo
         );
 

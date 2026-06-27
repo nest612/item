@@ -59,6 +59,7 @@ items:
     enchantability: 15
     block_durability_damage: 2
     entity_durability_damage: 1
+    armor_durability_damage: -1
   pioche_obsidienne:
     namespace: itemsplus
     id: pioche_obsidienne
@@ -73,6 +74,7 @@ items:
     enchantability: 15
     block_durability_damage: 1
     entity_durability_damage: 2
+    armor_durability_damage: -1
   hache_dragon:
     namespace: itemsplus
     id: hache_dragon
@@ -87,6 +89,7 @@ items:
     enchantability: 15
     block_durability_damage: 1
     entity_durability_damage: 2
+    armor_durability_damage: -1
   pelle_dragon:
     namespace: itemsplus
     id: pelle_dragon
@@ -101,6 +104,7 @@ items:
     enchantability: 15
     block_durability_damage: 1
     entity_durability_damage: 2
+    armor_durability_damage: -1
   houe_dragon:
     namespace: itemsplus
     id: houe_dragon
@@ -115,6 +119,7 @@ items:
     enchantability: 15
     block_durability_damage: 1
     entity_durability_damage: 1
+    armor_durability_damage: -1
   casque_tank:
     namespace: itemsplus
     id: casque_tank
@@ -236,6 +241,7 @@ items:
     enchantability: 18
     block_durability_damage: 2
     entity_durability_damage: 1
+    armor_durability_damage: -1
   pioche_nexium:
     namespace: itemsplus
     id: pioche_nexium
@@ -250,6 +256,7 @@ items:
     enchantability: 18
     block_durability_damage: 1
     entity_durability_damage: 2
+    armor_durability_damage: -1
   hache_nexium:
     namespace: itemsplus
     id: hache_nexium
@@ -264,6 +271,7 @@ items:
     enchantability: 18
     block_durability_damage: 1
     entity_durability_damage: 2
+    armor_durability_damage: -1
   pelle_nexium:
     namespace: itemsplus
     id: pelle_nexium
@@ -278,6 +286,7 @@ items:
     enchantability: 18
     block_durability_damage: 1
     entity_durability_damage: 2
+    armor_durability_damage: -1
   houe_nexium:
     namespace: itemsplus
     id: houe_nexium
@@ -292,6 +301,7 @@ items:
     enchantability: 18
     block_durability_damage: 1
     entity_durability_damage: 1
+    armor_durability_damage: -1
 minerals:
   azurite:
     namespace: mineraisplus

@@ -326,6 +326,7 @@ final class ItemCreatorCommand implements CommandExecutor{
                 "enchantability" => $enchantability,
                 "block_durability_damage" => $toolType === "sword" ? 2 : 1,
                 "entity_durability_damage" => $toolType === "hoe" || $toolType === "sword" ? 1 : 2,
+                "armor_durability_damage" => -1,
                 "creative" => $creative
             ];
 
